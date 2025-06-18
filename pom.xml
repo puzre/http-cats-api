@@ -59,6 +59,16 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <excludes>
+                    <exclude>dev/**</exclude>
+                    <exclude>prod/**</exclude>
+                </excludes>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>${quarkus.platform.group-id}</groupId>
@@ -127,6 +137,41 @@
                 <skipITs>false</skipITs>
                 <quarkus.native.enabled>true</quarkus.native.enabled>
             </properties>
+        </profile>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <quarkus.profile>dev</quarkus.profile>
+                <resource.directory>src/main/resources/dev</resource.directory>
+            </properties>
+            <build>
+                <resources>
+                    <resource>
+                        <directory>${resource.directory}</directory>
+                        <targetPath>.</targetPath>
+                        <filtering>true</filtering>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <quarkus.profile>prod</quarkus.profile>
+                <resource.directory>src/main/resources/prod</resource.directory>
+            </properties>
+            <build>
+                <resources>
+                    <resource>
+                        <directory>${resource.directory}</directory>
+                        <targetPath>.</targetPath>
+                        <filtering>true</filtering>
+                    </resource>
+                </resources>
+            </build>
         </profile>
     </profiles>
 </project>
