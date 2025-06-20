@@ -1,5 +1,10 @@
 package org.puzre.core.domain;
 
+import lombok.*;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter @Setter @Builder
 public class Cat {
 
     private int id;

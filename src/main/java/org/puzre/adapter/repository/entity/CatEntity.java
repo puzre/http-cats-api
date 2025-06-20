@@ -1,7 +1,12 @@
 package org.puzre.adapter.repository.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+@Builder
 @Entity(name = "cats")
 public class CatEntity {
 
