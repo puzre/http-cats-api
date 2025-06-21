@@ -2,6 +2,7 @@ package org.puzre.adapter.repository.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.puzre.core.domain.Cat;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,5 +28,13 @@ public class CatEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "type_id")
     private TypeEntity type;
+
+    public Cat toCat() {
+        return Cat.builder()
+                .id(this.id)
+                .code(this.code)
+                .imagePath(this.imagePath)
+                .message(this.message).build();
+    }
 
 }

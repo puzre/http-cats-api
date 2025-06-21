@@ -1,10 +1,10 @@
-package org.puzre.core.port.repository;
+package org.puzre.core.port.service;
 
 import org.puzre.core.domain.Cat;
 
 import java.util.List;
 
-public interface ICatRepository {
+public interface ICatService {
 
     List<Cat> listAllCatsLegacy();
 
