@@ -1,17 +1,19 @@
 package org.puzre.adapter.resource.response;
 
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
+import lombok.Data;
 
 import java.util.List;
 
-public class PaginatedResponse<T> {
+@Data
+public class PaginatedResponse<E, D> {
 
-    private final List<T> data;
-    private final int page;
-    private final int totalPages;
+    private List<D> data;
+    private int page;
+    private int totalPages;
 
-    public PaginatedResponse(PanacheQuery<T> panacheQuery) {
-        this.data = panacheQuery.stream().toList();
+    public PaginatedResponse(PanacheQuery<E> panacheQuery, List<D> data) {
+        this.data = data;
         this.page = panacheQuery.page().index + 1;
         this.totalPages = panacheQuery.pageCount();
     }
