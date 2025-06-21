@@ -28,4 +28,9 @@ public class CatService implements ICatService {
         return iCatRepository.listAllCats(page, totalItems);
     }
 
+    @Override
+    public List<Cat> listCatsLegacyByType(int typeId) {
+        return iCatRepository.listCatsLegacyByType(typeId);
+    }
+
 }

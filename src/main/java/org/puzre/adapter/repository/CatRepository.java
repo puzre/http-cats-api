@@ -37,4 +37,11 @@ public class CatRepository implements PanacheRepository<CatEntity>, ICatReposito
 
     }
 
+    @Override
+    public List<Cat> listCatsLegacyByType(int typeId) {
+        return this.list("type.id = ?1", typeId).stream()
+                .map(CatEntity::toCat)
+                .collect(Collectors.toList());
+    }
+
 }
