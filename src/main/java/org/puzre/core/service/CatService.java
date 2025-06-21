@@ -33,4 +33,9 @@ public class CatService implements ICatService {
         return iCatRepository.listCatsLegacyByType(typeId);
     }
 
+    @Override
+    public PaginatedResponse<CatEntity, Cat> listCatsByType(int typeId, int page, int totalItems) {
+        return iCatRepository.listCatsByType(typeId, page, totalItems);
+    }
+
 }

@@ -11,5 +11,6 @@ public interface ICatRepository {
     List<Cat> listAllCatsLegacy();
     PaginatedResponse<CatEntity, Cat> listAllCats(int page, int totalItems);
     List<Cat> listCatsLegacyByType(int typeId);
+    PaginatedResponse<CatEntity, Cat> listCatsByType(int typeId, int page, int totalItems);
 
 }

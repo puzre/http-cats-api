@@ -44,4 +44,20 @@ public class CatRepository implements PanacheRepository<CatEntity>, ICatReposito
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public PaginatedResponse<CatEntity, Cat> listCatsByType(int typeId, int page, int totalItems) {
+
+        Page p = new Page(page - 1, totalItems);
+
+        PanacheQuery<CatEntity> panacheQuery = this.find("type.id = ?1", typeId).page(p);
+
+        List<Cat> data = panacheQuery.stream()
+                .map(CatEntity::toCat)
+                .toList();
+
+        return new PaginatedResponse<>(panacheQuery, data);
+
+    }
+
+
 }
