@@ -1,20 +1,24 @@
-version: '3.8'
 
 services:
   maria_db:
-    image: mariadb/server:10.11
+    image: mariadb:10.11
     container_name: mariadb-db-container
     restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
     networks:
       http-cats-network:
         ipv4_address: 192.168.1.10
     healthcheck:
-      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost", "-u", "root", "-p", "password"]
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
       interval: 10s
       timeout: 40s
       retries: 5
     ports:
-      - "3030:3030"
+      - "3030:3306"
     environment:
       MARIADB_ROOT_PASSWORD: password
       MARIADB_DATABASE: http_cats
@@ -27,6 +31,11 @@ services:
   quarkus_api:
     restart: always
     container_name: http-cats-api-container
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
     networks:
       http-cats-network:
         ipv4_address: 192.168.1.20
@@ -49,3 +58,4 @@ networks:
       driver: default
       config:
         - subnet: 192.168.1.0/24
+          gateway: 192.168.1.1
