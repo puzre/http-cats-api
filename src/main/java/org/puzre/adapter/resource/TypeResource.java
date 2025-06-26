@@ -39,4 +39,11 @@ public class TypeResource {
         return Response.ok(iCatService.listCatsByType(typeId, page, totalItems)).build();
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{typeId}")
+    public Response getTypeById(@PathParam("typeId") int typeId) {
+        return Response.ok(iTypeService.findTypeById(typeId)).build();
+    }
+
 }

@@ -4,6 +4,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import org.puzre.core.domain.Type;
 import org.puzre.core.port.repository.ITypeRepository;
 import org.puzre.core.port.service.ITypeService;
+import org.puzre.core.port.service.IValidateService;
 
 import java.util.List;
 
@@ -11,9 +12,12 @@ import java.util.List;
 public class TypeService implements ITypeService {
 
     private final ITypeRepository iTypeRepository;
+    private final IValidateService iValidateService;
 
-    public TypeService(ITypeRepository iTypeRepository) {
+    public TypeService(ITypeRepository iTypeRepository,
+                       IValidateService iValidateService) {
         this.iTypeRepository = iTypeRepository;
+        this.iValidateService = iValidateService;
     }
 
     @Override
@@ -22,8 +26,11 @@ public class TypeService implements ITypeService {
     }
 
     @Override
-    public Type findTypeById(int id) {
-        return iTypeRepository.findById(id);
+    public Type findTypeById(int typeId) {
+
+        iValidateService.validateNumber(typeId, "typeId must be a positive value");
+
+        return iTypeRepository.findById(typeId);
     }
 
 }

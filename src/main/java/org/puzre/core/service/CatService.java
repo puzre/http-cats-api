@@ -63,11 +63,11 @@ public class CatService implements ICatService {
     }
 
     @Override
-    public Cat findCatById(int id) {
+    public Cat findCatById(int catId) {
 
-        iValidateService.validateNumber(id, "catId must be a positive value");
+        iValidateService.validateNumber(catId, "catId must be a positive value");
 
-        return iCatRepository.findById(id);
+        return iCatRepository.findById(catId);
     }
 
 }
