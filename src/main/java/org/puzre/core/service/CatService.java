@@ -62,4 +62,12 @@ public class CatService implements ICatService {
         return iCatRepository.listCatsByType(typeId, page, totalItems);
     }
 
+    @Override
+    public Cat findCatById(int id) {
+
+        iValidateService.validateNumber(id, "catId must be a positive value");
+
+        return iCatRepository.findById(id);
+    }
+
 }

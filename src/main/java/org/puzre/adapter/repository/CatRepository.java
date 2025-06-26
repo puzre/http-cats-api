@@ -7,6 +7,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import org.puzre.adapter.repository.entity.CatEntity;
 import org.puzre.adapter.resource.response.PaginatedResponse;
 import org.puzre.core.domain.Cat;
+import org.puzre.core.exception.CatNotFoundException;
 import org.puzre.core.port.repository.ICatRepository;
 
 import java.util.List;
@@ -59,5 +60,11 @@ public class CatRepository implements PanacheRepository<CatEntity>, ICatReposito
 
     }
 
+    @Override
+    public Cat findById(int id) {
+        return this.findByIdOptional((long) id)
+                .map(CatEntity::toCat)
+                .orElseThrow(() -> new CatNotFoundException("cat not found with id -> " + id));
+    }
 
 }
