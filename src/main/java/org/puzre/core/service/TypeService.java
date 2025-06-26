@@ -21,4 +21,9 @@ public class TypeService implements ITypeService {
         return iTypeRepository.listAllTypes();
     }
 
+    @Override
+    public Type findTypeById(int id) {
+        return iTypeRepository.findById(id);
+    }
+
 }

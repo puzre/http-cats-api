@@ -8,7 +8,7 @@ import org.puzre.core.port.service.IValidateService;
 public class ValidateService implements IValidateService {
 
     @Override
-    public void validatePaginatedNumber(int number, String message) throws InvalidNumberException {
+    public void validateNumber(int number, String message) throws InvalidNumberException {
         if (number <= 0)
             throw new InvalidNumberException(message);
     }

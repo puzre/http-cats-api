@@ -8,4 +8,6 @@ public interface ITypeRepository {
 
     List<Type> listAllTypes();
 
+    Type findById(int id);
+
 }

@@ -6,7 +6,7 @@ import jakarta.ws.rs.core.Response;
 import org.puzre.core.port.service.ICatService;
 import org.puzre.core.port.service.ITypeService;
 
-@Path("/type")
+@Path("http-cats/type")
 public class TypeResource {
 
     private final ITypeService iTypeService;

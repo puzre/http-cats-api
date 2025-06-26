@@ -4,6 +4,6 @@ import org.puzre.core.exception.InvalidNumberException;
 
 public interface IValidateService {
 
-    void validatePaginatedNumber(int number, String message) throws InvalidNumberException;
+    void validateNumber(int number, String message) throws InvalidNumberException;
 
 }

@@ -8,7 +8,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.puzre.core.port.service.ICatService;
 
-@Path("/cat")
+@Path("http-cats/cat")
 public class CatResource {
 
     private final ICatService iCatService;
