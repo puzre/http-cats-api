@@ -67,4 +67,11 @@ public class CatRepository implements PanacheRepository<CatEntity>, ICatReposito
                 .orElseThrow(() -> new CatNotFoundException("cat not found with id -> " + id));
     }
 
+    @Override
+    public List<Cat> searchCatsByMessageLegacy(String message) {
+        return this.list("message like ?1", "%"+message+"%").stream()
+                .map(CatEntity::toCat)
+                .collect(Collectors.toList());
+    }
+
 }

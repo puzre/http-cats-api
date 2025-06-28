@@ -13,5 +13,6 @@ public interface ICatService {
     List<Cat> listCatsLegacyByType(int typeId);
     PaginatedResponse<CatEntity, Cat> listCatsByType(int typeId, int page, int totalItems);
     Cat findCatById(int catId);
+    List<Cat> searchCatsByMessageLegacy(String message);
 
 }

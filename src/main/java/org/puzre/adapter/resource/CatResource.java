@@ -36,4 +36,11 @@ public class CatResource {
         return Response.ok(iCatService.findCatById(catId)).build();
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/legacy/search")
+    public Response searchCatsByMessage(@QueryParam("message") String message) {
+        return Response.ok(iCatService.searchCatsByMessageLegacy(message)).build();
+    }
+
 }
