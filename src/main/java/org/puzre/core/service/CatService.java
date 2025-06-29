@@ -78,4 +78,15 @@ public class CatService implements ICatService {
         return iCatRepository.searchCatsByMessageLegacy(message);
     }
 
+    @Override
+    public PaginatedResponse<CatEntity, Cat> searchCatsByMessage(String message, int page, int totalItems) {
+
+        iValidateService.validateString(message, "message must not be empty");
+        iValidateService.validateNumber(page, "page must be a positive value");
+        iValidateService.validateNumber(totalItems, "totalItems must be a positive value");
+
+        return iCatRepository.searchCatsByMessage(message, page, totalItems);
+    }
+
+
 }

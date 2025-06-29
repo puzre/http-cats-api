@@ -39,8 +39,17 @@ public class CatResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/legacy/search")
-    public Response searchCatsByMessage(@QueryParam("message") String message) {
+    public Response searchCatsByMessageLegacy(@QueryParam("message") String message) {
         return Response.ok(iCatService.searchCatsByMessageLegacy(message)).build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/search")
+    public Response searchCatsByMessage(@QueryParam("message") String message,
+                                        @QueryParam("page") int page,
+                                        @QueryParam("totalItems") int totalItems) {
+        return Response.ok(iCatService.searchCatsByMessage(message, page, totalItems)).build();
     }
 
 }

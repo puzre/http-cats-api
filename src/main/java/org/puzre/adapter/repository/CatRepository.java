@@ -74,4 +74,18 @@ public class CatRepository implements PanacheRepository<CatEntity>, ICatReposito
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public PaginatedResponse<CatEntity, Cat> searchCatsByMessage(String message, int page, int totalItems) {
+
+        Page p = new Page(page - 1, totalItems);
+
+        PanacheQuery<CatEntity> panacheQuery = this.find("message like ?1", "%"+message+"%").page(p);
+
+        List<Cat> data = panacheQuery.stream()
+                .map(CatEntity::toCat)
+                .toList();
+
+        return new PaginatedResponse<>(panacheQuery, data);
+    }
+
 }
