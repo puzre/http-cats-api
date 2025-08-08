@@ -5,9 +5,10 @@ import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import io.quarkus.panache.common.Page;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.puzre.adapter.repository.entity.CatEntity;
-import org.puzre.adapter.resource.response.PaginatedResponse;
+import org.puzre.adapter.resource.dto.response.PaginatedResponse;
 import org.puzre.core.domain.Cat;
 import org.puzre.core.exception.CatNotFoundException;
+import org.puzre.core.port.mapper.repository.IEntityToDomainMapper;
 import org.puzre.core.port.repository.ICatRepository;
 
 import java.util.List;
@@ -16,10 +17,18 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class CatRepository implements PanacheRepository<CatEntity>, ICatRepository {
 
+    private final IEntityToDomainMapper<CatEntity, Cat> iCatEntityToDomainMapper;
+
+    public CatRepository(
+            IEntityToDomainMapper<CatEntity, Cat> iCatEntityToDomainMapper
+    ) {
+        this.iCatEntityToDomainMapper = iCatEntityToDomainMapper;
+    }
+
     @Override
     public List<Cat> listAllCatsLegacy() {
         return this.listAll().stream()
-                .map(CatEntity::toCat)
+                .map(iCatEntityToDomainMapper::toDomain)
                 .collect(Collectors.toList());
     }
 

@@ -2,7 +2,7 @@ package org.puzre.core.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import org.puzre.adapter.repository.entity.CatEntity;
-import org.puzre.adapter.resource.response.PaginatedResponse;
+import org.puzre.adapter.resource.dto.response.PaginatedResponse;
 import org.puzre.core.domain.Cat;
 import org.puzre.core.port.repository.ICatRepository;
 import org.puzre.core.port.service.ICatService;

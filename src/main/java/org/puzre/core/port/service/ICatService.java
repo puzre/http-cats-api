@@ -1,7 +1,7 @@
 package org.puzre.core.port.service;
 
 import org.puzre.adapter.repository.entity.CatEntity;
-import org.puzre.adapter.resource.response.PaginatedResponse;
+import org.puzre.adapter.resource.dto.response.PaginatedResponse;
 import org.puzre.core.domain.Cat;
 
 import java.util.List;

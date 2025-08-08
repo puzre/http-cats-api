@@ -3,22 +3,39 @@ package org.puzre.adapter.resource;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.puzre.adapter.resource.dto.response.CatResponseDto;
+import org.puzre.core.domain.Cat;
+import org.puzre.core.port.mapper.adapter.IDomainToResponseMapper;
 import org.puzre.core.port.service.ICatService;
+
+import java.util.List;
 
 @Path("http-cats/cat")
 public class CatResource {
 
     private final ICatService iCatService;
 
-    public CatResource(ICatService iCatService) {
+    private final IDomainToResponseMapper<Cat, CatResponseDto> iCatToResponseDtoMapper;
+
+    public CatResource(
+            ICatService iCatService,
+            IDomainToResponseMapper<Cat, CatResponseDto> iCatToResponseDtoMapper
+    ) {
         this.iCatService = iCatService;
+        this.iCatToResponseDtoMapper = iCatToResponseDtoMapper;
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/all/legacy")
     public Response listAllCatsLegacy() {
-        return Response.ok(iCatService.listAllCatsLegacy()).build();
+
+        List<CatResponseDto> catResponseDtoList = iCatService.listAllCatsLegacy()
+                .stream()
+                .map(iCatToResponseDtoMapper::toResponseDto)
+                .toList();
+
+        return Response.ok(catResponseDtoList).build();
     }
 
     @GET
