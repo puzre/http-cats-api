@@ -2,11 +2,11 @@ package org.puzre.adapter.repository;
 
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
-import io.quarkus.panache.common.Page;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.puzre.adapter.repository.entity.CatEntity;
 import org.puzre.adapter.resource.dto.response.PaginatedResponse;
 import org.puzre.core.domain.Cat;
+import org.puzre.core.domain.Page;
 import org.puzre.core.exception.CatNotFoundException;
 import org.puzre.core.port.mapper.repository.IEntityToDomainMapper;
 import org.puzre.core.port.repository.ICatRepository;
@@ -33,9 +33,9 @@ public class CatRepository implements PanacheRepository<CatEntity>, ICatReposito
     }
 
     @Override
-    public PaginatedResponse<CatEntity, Cat> listAllCats(int page, int totalItems) {
+    public Page<Cat> listAllCats(Integer page, Integer totalItems) {
 
-        Page p = new Page(page - 1, totalItems);
+        io.quarkus.panache.common.Page p = new io.quarkus.panache.common.Page(page - 1, totalItems);
 
         PanacheQuery<CatEntity> panacheQuery = this.findAll().page(p);
 
@@ -43,7 +43,7 @@ public class CatRepository implements PanacheRepository<CatEntity>, ICatReposito
                 .map(CatEntity::toCat)
                 .toList();
 
-        return new PaginatedResponse<>(panacheQuery, data);
+        return new Page<>(panacheQuery.page().index + 1, panacheQuery.pageCount(), data);
 
     }
 
@@ -57,7 +57,7 @@ public class CatRepository implements PanacheRepository<CatEntity>, ICatReposito
     @Override
     public PaginatedResponse<CatEntity, Cat> listCatsByType(int typeId, int page, int totalItems) {
 
-        Page p = new Page(page - 1, totalItems);
+        io.quarkus.panache.common.Page p = new io.quarkus.panache.common.Page(page - 1, totalItems);
 
         PanacheQuery<CatEntity> panacheQuery = this.find("type.id = ?1", typeId).page(p);
 
@@ -86,7 +86,7 @@ public class CatRepository implements PanacheRepository<CatEntity>, ICatReposito
     @Override
     public PaginatedResponse<CatEntity, Cat> searchCatsByMessage(String message, int page, int totalItems) {
 
-        Page p = new Page(page - 1, totalItems);
+        io.quarkus.panache.common.Page p = new io.quarkus.panache.common.Page(page - 1, totalItems);
 
         PanacheQuery<CatEntity> panacheQuery = this.find("message like ?1", "%"+message+"%").page(p);
 

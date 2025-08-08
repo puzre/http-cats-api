@@ -4,6 +4,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import org.puzre.adapter.repository.entity.CatEntity;
 import org.puzre.adapter.resource.dto.response.PaginatedResponse;
 import org.puzre.core.domain.Cat;
+import org.puzre.core.domain.Page;
 import org.puzre.core.port.repository.ICatRepository;
 import org.puzre.core.port.service.ICatService;
 import org.puzre.core.port.service.ITypeService;
@@ -32,11 +33,7 @@ public class CatService implements ICatService {
     }
 
     @Override
-    public PaginatedResponse<CatEntity, Cat> listAllCats(int page, int totalItems) {
-
-        iValidateService.validateNumber(page, "page must be a positive value");
-        iValidateService.validateNumber(totalItems, "totalItems must be a positive value");
-
+    public Page<Cat> listAllCats(Integer page, Integer totalItems) {
         return iCatRepository.listAllCats(page, totalItems);
     }
 
