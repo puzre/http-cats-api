@@ -78,7 +78,7 @@ public class CatRepository implements PanacheRepository<CatEntity>, ICatReposito
     @Override
     public List<Cat> searchCatsByMessageLegacy(String message) {
         return this.list("message like ?1", "%"+message+"%").stream()
-                .map(CatEntity::toCat)
+                .map(iCatEntityToDomainMapper::toDomain)
                 .collect(Collectors.toList());
     }
 

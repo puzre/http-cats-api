@@ -6,7 +6,7 @@ import jakarta.ws.rs.QueryParam;
 import lombok.Getter;
 
 @Getter
-public class PaginationQueryParamsRequestDto {
+public class PageRequestDto {
 
     @QueryParam("page")
     @NotNull(message = "page is required")

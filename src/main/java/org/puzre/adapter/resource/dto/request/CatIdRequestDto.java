@@ -6,7 +6,7 @@ import jakarta.ws.rs.PathParam;
 import lombok.Getter;
 
 @Getter
-public class GetCatByIdPathParamRequestDto {
+public class CatIdRequestDto {
 
     @PathParam("catId")
     @NotNull(message = "catId is required")

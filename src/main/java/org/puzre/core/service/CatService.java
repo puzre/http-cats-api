@@ -67,9 +67,6 @@ public class CatService implements ICatService {
 
     @Override
     public List<Cat> searchCatsByMessageLegacy(String message) {
-
-        iValidateService.validateString(message, "message must not be empty");
-
         return iCatRepository.searchCatsByMessageLegacy(message);
     }
 

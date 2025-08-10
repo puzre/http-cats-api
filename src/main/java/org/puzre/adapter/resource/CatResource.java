@@ -4,8 +4,9 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.puzre.adapter.resource.dto.request.GetCatByIdPathParamRequestDto;
-import org.puzre.adapter.resource.dto.request.PaginationQueryParamsRequestDto;
+import org.puzre.adapter.resource.dto.request.CatIdRequestDto;
+import org.puzre.adapter.resource.dto.request.CatMessageRequestDto;
+import org.puzre.adapter.resource.dto.request.PageRequestDto;
 import org.puzre.adapter.resource.dto.response.CatResponseDto;
 import org.puzre.adapter.resource.dto.response.PageResponseDto;
 import org.puzre.core.domain.Cat;
@@ -51,11 +52,11 @@ public class CatResource {
     @Path("/all")
     public Response listAllCats(
             @Valid @BeanParam
-            PaginationQueryParamsRequestDto paginationQueryParamsRequestDto)
+            PageRequestDto pageRequestDto)
     {
         Page<Cat> page = iCatService.listAllCats(
-                paginationQueryParamsRequestDto.getPage(),
-                paginationQueryParamsRequestDto.getTotalItems());
+                pageRequestDto.getPage(),
+                pageRequestDto.getTotalItems());
 
         PageResponseDto<CatResponseDto> pageResponseDto = iCatPageToResponseDtoMapper.toResponseDto(page);
 
@@ -67,9 +68,9 @@ public class CatResource {
     @Path("/{catId}")
     public Response getCatById(
             @Valid @BeanParam
-            GetCatByIdPathParamRequestDto getCatByIdPathParamRequestDto
+            CatIdRequestDto catIdRequestDto
     ) {
-        Cat cat = iCatService.findCatById(getCatByIdPathParamRequestDto.getCatId());
+        Cat cat = iCatService.findCatById(catIdRequestDto.getCatId());
 
         CatResponseDto catResponseDto = iCatToResponseDtoMapper.toResponseDto(cat);
 
@@ -79,8 +80,16 @@ public class CatResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/legacy/search")
-    public Response searchCatsByMessageLegacy(@QueryParam("message") String message) {
-        return Response.ok(iCatService.searchCatsByMessageLegacy(message)).build();
+    public Response searchCatsByMessageLegacy(
+            @Valid @BeanParam
+            CatMessageRequestDto catMessageRequestDto
+    ) {
+        List<CatResponseDto> catResponseDtoList = iCatService.searchCatsByMessageLegacy(catMessageRequestDto.getMessage())
+                .stream()
+                .map(iCatToResponseDtoMapper::toResponseDto)
+                .toList();
+
+        return Response.ok(catResponseDtoList).build();
     }
 
     @GET
