@@ -22,7 +22,7 @@ public class PageToResponseDtoMapper implements IDomainToResponseMapper<Page<Cat
     public PageResponseDto<CatResponseDto> toResponseDto(Page<Cat> domain) {
        return new PageResponseDto<>(
                 domain.getPage(),
-                domain.getTotalPages(),
+                domain.getPageCount(),
                 domain.getData()
                         .stream()
                         .map(iCatToResponseDtoMapper::toResponseDto)

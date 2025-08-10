@@ -10,7 +10,7 @@ import java.util.List;
 public class PageResponseDto<T> {
 
     private int page;
-    private int totalPages;
+    private int pageCount;
     private List<T> data;
 
 }

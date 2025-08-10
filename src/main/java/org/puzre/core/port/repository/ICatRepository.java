@@ -16,6 +16,6 @@ public interface ICatRepository {
     PaginatedResponse<CatEntity, Cat> listCatsByType(int typeId, int page, int totalItems);
     Optional<Cat> findCatById(Long id);
     List<Cat> searchCatsByMessageLegacy(String message);
-    PaginatedResponse<CatEntity, Cat> searchCatsByMessage(String message, int page, int totalItems);
+    Page<Cat> searchCatsByMessage(String message, int page, int totalItems);
 
 }

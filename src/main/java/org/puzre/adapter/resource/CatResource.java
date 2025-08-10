@@ -56,7 +56,7 @@ public class CatResource {
     {
         Page<Cat> page = iCatService.listAllCats(
                 pageRequestDto.getPage(),
-                pageRequestDto.getTotalItems());
+                pageRequestDto.getSize());
 
         PageResponseDto<CatResponseDto> pageResponseDto = iCatPageToResponseDtoMapper.toResponseDto(page);
 
@@ -95,10 +95,20 @@ public class CatResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/search")
-    public Response searchCatsByMessage(@QueryParam("message") String message,
-                                        @QueryParam("page") int page,
-                                        @QueryParam("totalItems") int totalItems) {
-        return Response.ok(iCatService.searchCatsByMessage(message, page, totalItems)).build();
+    public Response searchCatsByMessage(
+            @Valid @BeanParam
+            CatMessageRequestDto catMessageRequestDto,
+            @Valid @BeanParam
+            PageRequestDto pageRequestDto
+    ) {
+        Page<Cat> page = iCatService.searchCatsByMessage(
+                catMessageRequestDto.getMessage(),
+                pageRequestDto.getPage(),
+                pageRequestDto.getSize());
+
+        PageResponseDto<CatResponseDto> pageResponseDto = iCatPageToResponseDtoMapper.toResponseDto(page);
+
+        return Response.ok(pageResponseDto).build();
     }
 
 }

@@ -13,9 +13,9 @@ public class PageRequestDto {
     @Min(value = 1, message = "page must be greater than 0")
     private Integer page;
 
-    @QueryParam("totalItems")
-    @NotNull(message = "totalItems is required")
-    @Min(value = 1, message = "totaItems must be greater than 0")
-    private Integer totalItems;
+    @QueryParam("size")
+    @NotNull(message = "size is required")
+    @Min(value = 1, message = "size must be greater than 0")
+    private Integer size;
 
 }
