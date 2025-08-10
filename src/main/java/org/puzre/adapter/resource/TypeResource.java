@@ -94,8 +94,13 @@ public class TypeResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{typeId}")
-    public Response getTypeById(@PathParam("typeId") Long typeId) {
-        return Response.ok(iTypeService.findTypeById(typeId)).build();
+    public Response getTypeById(
+            @Valid @BeanParam
+            TypeIdRequestDto typeIdRequestDto
+    ) {
+        Type type = iTypeService.findTypeById(typeIdRequestDto.getTypeId());
+        TypeResponseDto typeResponseDto = iTypeToResponseDtoMapper.toResponseDto(type);
+        return Response.ok(typeResponseDto).build();
     }
 
 }
