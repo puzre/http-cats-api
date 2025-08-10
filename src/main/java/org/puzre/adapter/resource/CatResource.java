@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.puzre.adapter.resource.dto.request.GetCatByIdPathParamRequestDto;
 import org.puzre.adapter.resource.dto.request.PaginationQueryParamsRequestDto;
 import org.puzre.adapter.resource.dto.response.CatResponseDto;
 import org.puzre.adapter.resource.dto.response.PageResponseDto;
@@ -64,8 +65,15 @@ public class CatResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{catId}")
-    public Response getCatById(@PathParam("catId") int catId) {
-        return Response.ok(iCatService.findCatById(catId)).build();
+    public Response getCatById(
+            @Valid @BeanParam
+            GetCatByIdPathParamRequestDto getCatByIdPathParamRequestDto
+    ) {
+        Cat cat = iCatService.findCatById(getCatByIdPathParamRequestDto.getCatId());
+
+        CatResponseDto catResponseDto = iCatToResponseDtoMapper.toResponseDto(cat);
+
+        return Response.ok(catResponseDto).build();
     }
 
     @GET

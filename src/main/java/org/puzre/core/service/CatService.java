@@ -5,6 +5,7 @@ import org.puzre.adapter.repository.entity.CatEntity;
 import org.puzre.adapter.resource.dto.response.PaginatedResponse;
 import org.puzre.core.domain.Cat;
 import org.puzre.core.domain.Page;
+import org.puzre.core.exception.CatNotFoundException;
 import org.puzre.core.port.repository.ICatRepository;
 import org.puzre.core.port.service.ICatService;
 import org.puzre.core.port.service.ITypeService;
@@ -60,11 +61,8 @@ public class CatService implements ICatService {
     }
 
     @Override
-    public Cat findCatById(int catId) {
-
-        iValidateService.validateNumber(catId, "catId must be a positive value");
-
-        return iCatRepository.findById(catId);
+    public Cat findCatById(Long catId) {
+        return iCatRepository.findCatById(catId).orElseThrow(() -> new CatNotFoundException("cat not found for key -> " + catId));
     }
 
     @Override

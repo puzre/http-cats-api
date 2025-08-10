@@ -6,6 +6,7 @@ import org.puzre.core.domain.Cat;
 import org.puzre.core.domain.Page;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ICatRepository {
 
@@ -13,7 +14,7 @@ public interface ICatRepository {
     Page<Cat> listAllCats(Integer page, Integer totalItems);
     List<Cat> listCatsLegacyByType(int typeId);
     PaginatedResponse<CatEntity, Cat> listCatsByType(int typeId, int page, int totalItems);
-    Cat findById(int id);
+    Optional<Cat> findCatById(Long id);
     List<Cat> searchCatsByMessageLegacy(String message);
     PaginatedResponse<CatEntity, Cat> searchCatsByMessage(String message, int page, int totalItems);
 

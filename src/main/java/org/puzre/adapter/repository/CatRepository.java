@@ -12,6 +12,7 @@ import org.puzre.core.port.mapper.repository.IEntityToDomainMapper;
 import org.puzre.core.port.repository.ICatRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
@@ -70,10 +71,8 @@ public class CatRepository implements PanacheRepository<CatEntity>, ICatReposito
     }
 
     @Override
-    public Cat findById(int id) {
-        return this.findByIdOptional((long) id)
-                .map(CatEntity::toCat)
-                .orElseThrow(() -> new CatNotFoundException("cat not found with id -> " + id));
+    public Optional<Cat> findCatById(Long id) {
+        return this.findByIdOptional(id).map(iCatEntityToDomainMapper::toDomain);
     }
 
     @Override
