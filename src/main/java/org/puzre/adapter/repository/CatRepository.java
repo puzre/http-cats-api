@@ -4,10 +4,8 @@ import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.puzre.adapter.repository.entity.CatEntity;
-import org.puzre.adapter.resource.dto.response.PaginatedResponse;
 import org.puzre.core.domain.Cat;
 import org.puzre.core.domain.Page;
-import org.puzre.core.exception.CatNotFoundException;
 import org.puzre.core.port.mapper.repository.IEntityToDomainMapper;
 import org.puzre.core.port.repository.ICatRepository;
 

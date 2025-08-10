@@ -1,8 +1,6 @@
 package org.puzre.core.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import org.puzre.adapter.repository.entity.CatEntity;
-import org.puzre.adapter.resource.dto.response.PaginatedResponse;
 import org.puzre.core.domain.Cat;
 import org.puzre.core.domain.Page;
 import org.puzre.core.domain.Type;
@@ -11,25 +9,19 @@ import org.puzre.core.exception.TypeNotFoundException;
 import org.puzre.core.port.repository.ICatRepository;
 import org.puzre.core.port.repository.ITypeRepository;
 import org.puzre.core.port.service.ICatService;
-import org.puzre.core.port.service.ITypeService;
-import org.puzre.core.port.service.IValidateService;
 
 import java.util.List;
-import java.util.Optional;
 
 @ApplicationScoped
 public class CatService implements ICatService {
 
     private final ICatRepository iCatRepository;
-    private final IValidateService iValidateService;
 
     private final ITypeRepository iTypeRepository;
 
     public CatService(ICatRepository iCatRepository,
-                      IValidateService iValidateService,
                       ITypeRepository iTypeRepository) {
         this.iCatRepository = iCatRepository;
-        this.iValidateService = iValidateService;
         this.iTypeRepository = iTypeRepository;
     }
 

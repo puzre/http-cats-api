@@ -8,7 +8,6 @@ import java.util.Optional;
 public interface ITypeRepository {
 
     List<Type> listAllTypes();
-
     Optional<Type> findTypeById(Long id);
 
 }
