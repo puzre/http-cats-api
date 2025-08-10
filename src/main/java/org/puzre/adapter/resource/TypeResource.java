@@ -43,20 +43,19 @@ public class TypeResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/all")
-    public Response listAllTypes() {
-
-        List<TypeResponseDto> typeResponseDtoList = iTypeService.listAllTypes()
-                .stream()
-                .map(iTypeToResponseDtoMapper::toResponseDto)
-                .toList();
-
-        return Response.ok(typeResponseDtoList).build();
+    @Path("/{typeId}")
+    public Response getTypeById(
+            @Valid @BeanParam
+            TypeIdRequestDto typeIdRequestDto
+    ) {
+        Type type = iTypeService.findTypeById(typeIdRequestDto.getTypeId());
+        TypeResponseDto typeResponseDto = iTypeToResponseDtoMapper.toResponseDto(type);
+        return Response.ok(typeResponseDto).build();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/{typeId}/cat/legacy")
+    @Path("/{typeId}/cats/legacy")
     public Response listCatsLegacyByType(
             @Valid @BeanParam
             TypeIdRequestDto typeIdRequestDto
@@ -71,7 +70,7 @@ public class TypeResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/{typeId}/cat")
+    @Path("/{typeId}/cats")
     public Response listCatsByType(
             @Valid @BeanParam
             TypeIdRequestDto typeIdRequestDto,
@@ -87,18 +86,6 @@ public class TypeResource {
         PageResponseDto<CatResponseDto> pageResponseDto = iCatPageToResponseDtoMapper.toResponseDto(page);
 
         return Response.ok(pageResponseDto).build();
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/{typeId}")
-    public Response getTypeById(
-            @Valid @BeanParam
-            TypeIdRequestDto typeIdRequestDto
-    ) {
-        Type type = iTypeService.findTypeById(typeIdRequestDto.getTypeId());
-        TypeResponseDto typeResponseDto = iTypeToResponseDtoMapper.toResponseDto(type);
-        return Response.ok(typeResponseDto).build();
     }
 
 }
