@@ -2,9 +2,9 @@ package org.puzre.core.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import org.puzre.core.domain.Type;
+import org.puzre.core.exception.TypeNotFoundException;
 import org.puzre.core.port.repository.ITypeRepository;
 import org.puzre.core.port.service.ITypeService;
-import org.puzre.core.port.service.IValidateService;
 
 import java.util.List;
 
@@ -12,12 +12,9 @@ import java.util.List;
 public class TypeService implements ITypeService {
 
     private final ITypeRepository iTypeRepository;
-    private final IValidateService iValidateService;
 
-    public TypeService(ITypeRepository iTypeRepository,
-                       IValidateService iValidateService) {
+    public TypeService(ITypeRepository iTypeRepository) {
         this.iTypeRepository = iTypeRepository;
-        this.iValidateService = iValidateService;
     }
 
     @Override
@@ -26,11 +23,9 @@ public class TypeService implements ITypeService {
     }
 
     @Override
-    public Type findTypeById(int typeId) {
-
-        iValidateService.validateNumber(typeId, "typeId must be a positive value");
-
-        return iTypeRepository.findById(typeId);
+    public Type findTypeById(Long typeId) {
+        return iTypeRepository.findTypeById(typeId)
+                .orElseThrow(() -> new TypeNotFoundException("type not found for key -> " + typeId));
     }
 
 }

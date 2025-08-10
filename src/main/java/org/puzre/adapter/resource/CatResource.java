@@ -1,55 +1,43 @@
 package org.puzre.adapter.resource;
 
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.puzre.adapter.resource.dto.request.CatIdRequestDto;
+import org.puzre.adapter.resource.dto.response.CatResponseDto;
+import org.puzre.core.domain.Cat;
+import org.puzre.adapter.resource.mapper.spi.IDomainToResponseMapper;
 import org.puzre.core.port.service.ICatService;
+
 
 @Path("http-cats/cat")
 public class CatResource {
 
     private final ICatService iCatService;
 
-    public CatResource(ICatService iCatService) {
+    private final IDomainToResponseMapper<Cat, CatResponseDto> iCatToResponseDtoMapper;
+
+    public CatResource(
+            ICatService iCatService,
+            IDomainToResponseMapper<Cat, CatResponseDto> iCatToResponseDtoMapper
+    ) {
         this.iCatService = iCatService;
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/all/legacy")
-    public Response listAllCatsLegacy() {
-        return Response.ok(iCatService.listAllCatsLegacy()).build();
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/all")
-    public Response listAllCatsLegacy(@QueryParam("page") int page,
-                                      @QueryParam("totalItems") int totalItems) {
-        return Response.ok(iCatService.listAllCats(page, totalItems)).build();
+        this.iCatToResponseDtoMapper = iCatToResponseDtoMapper;
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{catId}")
-    public Response getCatById(@PathParam("catId") int catId) {
-        return Response.ok(iCatService.findCatById(catId)).build();
-    }
+    public Response getCatById(
+            @Valid @BeanParam
+            CatIdRequestDto catIdRequestDto
+    ) {
+        Cat cat = iCatService.findCatById(catIdRequestDto.getCatId());
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/legacy/search")
-    public Response searchCatsByMessageLegacy(@QueryParam("message") String message) {
-        return Response.ok(iCatService.searchCatsByMessageLegacy(message)).build();
-    }
+        CatResponseDto catResponseDto = iCatToResponseDtoMapper.toResponseDto(cat);
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/search")
-    public Response searchCatsByMessage(@QueryParam("message") String message,
-                                        @QueryParam("page") int page,
-                                        @QueryParam("totalItems") int totalItems) {
-        return Response.ok(iCatService.searchCatsByMessage(message, page, totalItems)).build();
+        return Response.ok(catResponseDto).build();
     }
 
 }

@@ -1,13 +1,14 @@
 package org.puzre.core.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import org.puzre.adapter.repository.entity.CatEntity;
-import org.puzre.adapter.resource.response.PaginatedResponse;
 import org.puzre.core.domain.Cat;
+import org.puzre.core.domain.Page;
+import org.puzre.core.domain.Type;
+import org.puzre.core.exception.CatNotFoundException;
+import org.puzre.core.exception.TypeNotFoundException;
 import org.puzre.core.port.repository.ICatRepository;
+import org.puzre.core.port.repository.ITypeRepository;
 import org.puzre.core.port.service.ICatService;
-import org.puzre.core.port.service.ITypeService;
-import org.puzre.core.port.service.IValidateService;
 
 import java.util.List;
 
@@ -15,15 +16,13 @@ import java.util.List;
 public class CatService implements ICatService {
 
     private final ICatRepository iCatRepository;
-    private final IValidateService iValidateService;
-    private final ITypeService iTypeService;
+
+    private final ITypeRepository iTypeRepository;
 
     public CatService(ICatRepository iCatRepository,
-                      IValidateService iValidateService,
-                      ITypeService iTypeService) {
+                      ITypeRepository iTypeRepository) {
         this.iCatRepository = iCatRepository;
-        this.iValidateService = iValidateService;
-        this.iTypeService = iTypeService;
+        this.iTypeRepository = iTypeRepository;
     }
 
     @Override
@@ -32,59 +31,40 @@ public class CatService implements ICatService {
     }
 
     @Override
-    public PaginatedResponse<CatEntity, Cat> listAllCats(int page, int totalItems) {
-
-        iValidateService.validateNumber(page, "page must be a positive value");
-        iValidateService.validateNumber(totalItems, "totalItems must be a positive value");
-
+    public Page<Cat> listAllCats(Integer page, Integer totalItems) {
         return iCatRepository.listAllCats(page, totalItems);
     }
 
     @Override
-    public List<Cat> listCatsLegacyByType(int typeId) {
+    public List<Cat> listCatsLegacyByType(Long typeId) {
 
-        iValidateService.validateNumber(typeId, "typeId must be a positive value");
+        Type type = iTypeRepository.findTypeById(typeId)
+                .orElseThrow(() -> new TypeNotFoundException("type not found for key -> " + typeId));
 
-        iTypeService.findTypeById(typeId);
-
-        return iCatRepository.listCatsLegacyByType(typeId);
+        return iCatRepository.listCatsLegacyByType(Long.parseLong(String.valueOf(type.getId())));
     }
 
     @Override
-    public PaginatedResponse<CatEntity, Cat> listCatsByType(int typeId, int page, int totalItems) {
+    public Page<Cat> listCatsByType(Long typeId, Integer page, Integer size) {
 
-        iValidateService.validateNumber(page, "page must be a positive value");
-        iValidateService.validateNumber(totalItems, "totalItems must be a positive value");
-        iValidateService.validateNumber(typeId, "typeId must be a positive value");
+        Type type = iTypeRepository.findTypeById(Long.parseLong(String.valueOf(typeId)))
+                .orElseThrow(() -> new TypeNotFoundException("type not found for key -> " + typeId));
 
-        iTypeService.findTypeById(typeId);
-
-        return iCatRepository.listCatsByType(typeId, page, totalItems);
+        return iCatRepository.listCatsByType(Long.parseLong(String.valueOf(type.getId())), page, size);
     }
 
     @Override
-    public Cat findCatById(int catId) {
-
-        iValidateService.validateNumber(catId, "catId must be a positive value");
-
-        return iCatRepository.findById(catId);
+    public Cat findCatById(Long catId) {
+        return iCatRepository.findCatById(catId).orElseThrow(() -> new CatNotFoundException("cat not found for key -> " + catId));
     }
 
     @Override
     public List<Cat> searchCatsByMessageLegacy(String message) {
-
-        iValidateService.validateString(message, "message must not be empty");
-
         return iCatRepository.searchCatsByMessageLegacy(message);
     }
 
     @Override
-    public PaginatedResponse<CatEntity, Cat> searchCatsByMessage(String message, int page, int totalItems) {
-
-        iValidateService.validateString(message, "message must not be empty");
-        iValidateService.validateNumber(page, "page must be a positive value");
-        iValidateService.validateNumber(totalItems, "totalItems must be a positive value");
-
+    public Page<Cat> searchCatsByMessage(String message, int page, int totalItems) {
         return iCatRepository.searchCatsByMessage(message, page, totalItems);
     }
 

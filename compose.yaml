@@ -30,7 +30,7 @@ services:
 
   quarkus_api:
     restart: always
-    container_name: http-cats-api-container
+    container_name: quarkus-api-container
     deploy:
       resources:
         limits:
