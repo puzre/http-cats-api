@@ -8,11 +8,11 @@ import org.puzre.core.domain.Page;
 import org.puzre.core.port.mapper.adapter.IDomainToResponseMapper;
 
 @Singleton
-public class PageToResponseDtoMapper implements IDomainToResponseMapper<Page<Cat>, PageResponseDto<CatResponseDto>> {
+public class CatPageToResponseDtoMapper implements IDomainToResponseMapper<Page<Cat>, PageResponseDto<CatResponseDto>> {
 
     private final IDomainToResponseMapper<Cat, CatResponseDto> iCatToResponseDtoMapper;
 
-    public PageToResponseDtoMapper(
+    public CatPageToResponseDtoMapper(
             IDomainToResponseMapper<Cat, CatResponseDto> iCatToResponseDtoMapper
     ) {
         this.iCatToResponseDtoMapper = iCatToResponseDtoMapper;

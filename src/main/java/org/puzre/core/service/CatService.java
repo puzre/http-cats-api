@@ -53,16 +53,12 @@ public class CatService implements ICatService {
     }
 
     @Override
-    public PaginatedResponse<CatEntity, Cat> listCatsByType(int typeId, int page, int totalItems) {
-
-        iValidateService.validateNumber(page, "page must be a positive value");
-        iValidateService.validateNumber(totalItems, "totalItems must be a positive value");
-        iValidateService.validateNumber(typeId, "typeId must be a positive value");
+    public Page<Cat> listCatsByType(Long typeId, Integer page, Integer size) {
 
         Type type = iTypeRepository.findTypeById(Long.parseLong(String.valueOf(typeId)))
                 .orElseThrow(() -> new TypeNotFoundException("type not found for key -> " + typeId));
 
-        return iCatRepository.listCatsByType(type.getId(), page, totalItems);
+        return iCatRepository.listCatsByType(Long.parseLong(String.valueOf(type.getId())), page, size);
     }
 
     @Override

@@ -56,17 +56,17 @@ public class CatRepository implements PanacheRepository<CatEntity>, ICatReposito
     }
 
     @Override
-    public PaginatedResponse<CatEntity, Cat> listCatsByType(int typeId, int page, int totalItems) {
+    public Page<Cat> listCatsByType(Long typeId, Integer page, Integer size) {
 
-        io.quarkus.panache.common.Page p = new io.quarkus.panache.common.Page(page - 1, totalItems);
+        io.quarkus.panache.common.Page p = new io.quarkus.panache.common.Page(page - 1, size);
 
         PanacheQuery<CatEntity> panacheQuery = this.find("type.id = ?1", typeId).page(p);
 
         List<Cat> data = panacheQuery.stream()
-                .map(CatEntity::toCat)
+                .map(iCatEntityToDomainMapper::toDomain)
                 .toList();
 
-        return new PaginatedResponse<>(panacheQuery, data);
+        return new Page<>(panacheQuery.page().index + 1, panacheQuery.pageCount(), data);
 
     }
 

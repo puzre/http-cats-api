@@ -6,10 +6,13 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jaxb.core.v2.model.core.ID;
 import org.puzre.adapter.resource.dto.request.CatMessageRequestDto;
+import org.puzre.adapter.resource.dto.request.PageRequestDto;
 import org.puzre.adapter.resource.dto.request.TypeIdRequestDto;
 import org.puzre.adapter.resource.dto.response.CatResponseDto;
+import org.puzre.adapter.resource.dto.response.PageResponseDto;
 import org.puzre.adapter.resource.dto.response.TypeResponseDto;
 import org.puzre.core.domain.Cat;
+import org.puzre.core.domain.Page;
 import org.puzre.core.domain.Type;
 import org.puzre.core.port.mapper.adapter.IDomainToResponseMapper;
 import org.puzre.core.port.service.ICatService;
@@ -25,16 +28,19 @@ public class TypeResource {
 
     private final IDomainToResponseMapper<Type, TypeResponseDto> iTypeToResponseDtoMapper;
     private final IDomainToResponseMapper<Cat, CatResponseDto> iCatToResponseDtoMapper;
+    private final IDomainToResponseMapper<Page<Cat>, PageResponseDto<CatResponseDto>> iCatPageToResponseDtoMapper;
 
     public TypeResource(
             ITypeService iTypeService,
             ICatService iCatService,
             IDomainToResponseMapper<Type, TypeResponseDto> iTypeToResponseDtoMapper,
-            IDomainToResponseMapper<Cat, CatResponseDto> iCatToResponseDtoMapper) {
+            IDomainToResponseMapper<Cat, CatResponseDto> iCatToResponseDtoMapper,
+            IDomainToResponseMapper<Page<Cat>, PageResponseDto<CatResponseDto>> iCatPageToResponseDtoMapper) {
         this.iTypeService = iTypeService;
         this.iCatService = iCatService;
         this.iTypeToResponseDtoMapper = iTypeToResponseDtoMapper;
         this.iCatToResponseDtoMapper = iCatToResponseDtoMapper;
+        this.iCatPageToResponseDtoMapper = iCatPageToResponseDtoMapper;
     }
 
     @GET
@@ -68,8 +74,21 @@ public class TypeResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{typeId}/cat")
-    public Response listCatsByType(@PathParam("typeId") int typeId, @QueryParam("page") int page, @QueryParam("totalItems") int totalItems) {
-        return Response.ok(iCatService.listCatsByType(typeId, page, totalItems)).build();
+    public Response listCatsByType(
+            @Valid @BeanParam
+            TypeIdRequestDto typeIdRequestDto,
+            @Valid @BeanParam
+            PageRequestDto pageRequestDto
+    ) {
+        Page<Cat> page = iCatService.listCatsByType(
+                typeIdRequestDto.getTypeId(),
+                pageRequestDto.getPage(),
+                pageRequestDto.getSize()
+        );
+
+        PageResponseDto<CatResponseDto> pageResponseDto = iCatPageToResponseDtoMapper.toResponseDto(page);
+
+        return Response.ok(pageResponseDto).build();
     }
 
     @GET
