@@ -12,7 +12,7 @@ public interface ICatRepository {
 
     List<Cat> listAllCatsLegacy();
     Page<Cat> listAllCats(Integer page, Integer totalItems);
-    List<Cat> listCatsLegacyByType(int typeId);
+    List<Cat> listCatsLegacyByType(Long typeId);
     PaginatedResponse<CatEntity, Cat> listCatsByType(int typeId, int page, int totalItems);
     Optional<Cat> findCatById(Long id);
     List<Cat> searchCatsByMessageLegacy(String message);

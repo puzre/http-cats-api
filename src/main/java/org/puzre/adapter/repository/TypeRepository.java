@@ -9,6 +9,7 @@ import org.puzre.core.port.mapper.repository.IEntityToDomainMapper;
 import org.puzre.core.port.repository.ITypeRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
@@ -30,10 +31,9 @@ public class TypeRepository implements PanacheRepository<TypeEntity>, ITypeRepos
     }
 
     @Override
-    public Type findById(int id) {
+    public Optional<Type> findTypeById(Long id) {
         return this.findByIdOptional((long) id)
-                .map(TypeEntity::toType)
-                .orElseThrow(() -> new TypeNotFoundException("type not found with id -> " + id));
+                .map(TypeEntity::toType);
     }
 
 }
