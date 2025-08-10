@@ -1,4 +1,4 @@
-package org.puzre.core.port.mapper.repository;
+package org.puzre.adapter.repository.mapper.spi;
 
 public interface IEntityToDomainMapper <E, D> {
     D toDomain(E entity);

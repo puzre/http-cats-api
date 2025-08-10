@@ -11,7 +11,7 @@ import org.puzre.adapter.resource.dto.response.CatResponseDto;
 import org.puzre.adapter.resource.dto.response.PageResponseDto;
 import org.puzre.core.domain.Cat;
 import org.puzre.core.domain.Page;
-import org.puzre.core.port.mapper.adapter.IDomainToResponseMapper;
+import org.puzre.adapter.resource.mapper.spi.IDomainToResponseMapper;
 import org.puzre.core.port.service.ICatService;
 
 import java.util.List;

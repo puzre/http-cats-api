@@ -1,4 +1,4 @@
-package org.puzre.core.port.mapper.adapter;
+package org.puzre.adapter.resource.mapper.spi;
 
 public interface IDomainToResponseMapper<D, R> {
     R toResponseDto(D domain);

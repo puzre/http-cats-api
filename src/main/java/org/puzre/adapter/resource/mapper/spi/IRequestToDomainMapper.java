@@ -1,4 +1,4 @@
-package org.puzre.core.port.mapper.adapter;
+package org.puzre.adapter.resource.mapper.spi;
 
 public interface IRequestToDomainMapper<R, D> {
     D toDomain(R requestDto);

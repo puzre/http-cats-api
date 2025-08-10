@@ -2,8 +2,8 @@ package org.puzre.adapter.repository.mapper;
 
 import jakarta.inject.Singleton;
 import org.puzre.adapter.repository.entity.TypeEntity;
+import org.puzre.adapter.repository.mapper.spi.IEntityToDomainMapper;
 import org.puzre.core.domain.Type;
-import org.puzre.core.port.mapper.repository.IEntityToDomainMapper;
 
 @Singleton
 public class TypeEntityToDomainMapper implements IEntityToDomainMapper<TypeEntity, Type> {
