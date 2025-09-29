@@ -7,7 +7,7 @@ import org.puzre.adapter.repository.entity.CatEntity;
 import org.puzre.core.domain.Cat;
 import org.puzre.core.domain.Page;
 import org.puzre.adapter.repository.mapper.spi.IEntityToDomainMapper;
-import org.puzre.core.port.repository.ICatRepository;
+import org.puzre.application.port.repository.ICatRepository;
 
 import java.util.List;
 import java.util.Optional;

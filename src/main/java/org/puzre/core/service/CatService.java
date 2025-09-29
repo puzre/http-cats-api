@@ -4,9 +4,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import org.puzre.core.domain.Cat;
 import org.puzre.core.domain.Page;
 import org.puzre.core.domain.Type;
-import org.puzre.core.exception.CatNotFoundException;
 import org.puzre.core.exception.TypeNotFoundException;
-import org.puzre.core.port.repository.ICatRepository;
+import org.puzre.application.port.repository.ICatRepository;
 import org.puzre.core.port.repository.ITypeRepository;
 import org.puzre.core.port.service.ICatService;
 
@@ -51,11 +50,6 @@ public class CatService implements ICatService {
                 .orElseThrow(() -> new TypeNotFoundException("type not found for key -> " + typeId));
 
         return iCatRepository.listCatsByType(Long.parseLong(String.valueOf(type.getId())), page, size);
-    }
-
-    @Override
-    public Cat findCatById(Long catId) {
-        return iCatRepository.findCatById(catId).orElseThrow(() -> new CatNotFoundException("cat not found for key -> " + catId));
     }
 
     @Override

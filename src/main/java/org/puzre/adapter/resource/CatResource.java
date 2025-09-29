@@ -4,27 +4,21 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import lombok.RequiredArgsConstructor;
 import org.puzre.adapter.resource.dto.request.CatIdRequestDto;
 import org.puzre.adapter.resource.dto.response.CatResponseDto;
+import org.puzre.adapter.resource.mapper.CatToResponseDtoMapper;
+import org.puzre.application.port.usecase.IFindCatByIdUseCase;
 import org.puzre.core.domain.Cat;
-import org.puzre.adapter.resource.mapper.spi.IDomainToResponseMapper;
-import org.puzre.core.port.service.ICatService;
 
 
 @Path("http-cats/cat")
+@RequiredArgsConstructor
 public class CatResource {
 
-    private final ICatService iCatService;
+    private final IFindCatByIdUseCase iFindCatByIdUseCase;
 
-    private final IDomainToResponseMapper<Cat, CatResponseDto> iCatToResponseDtoMapper;
-
-    public CatResource(
-            ICatService iCatService,
-            IDomainToResponseMapper<Cat, CatResponseDto> iCatToResponseDtoMapper
-    ) {
-        this.iCatService = iCatService;
-        this.iCatToResponseDtoMapper = iCatToResponseDtoMapper;
-    }
+    private final CatToResponseDtoMapper catToResponseDtoMapper;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -33,10 +27,8 @@ public class CatResource {
             @Valid @BeanParam
             CatIdRequestDto catIdRequestDto
     ) {
-        Cat cat = iCatService.findCatById(catIdRequestDto.getCatId());
-
-        CatResponseDto catResponseDto = iCatToResponseDtoMapper.toResponseDto(cat);
-
+        Cat cat = iFindCatByIdUseCase.execute(catIdRequestDto.getCatId());
+        CatResponseDto catResponseDto = catToResponseDtoMapper.toResponseDto(cat);
         return Response.ok(catResponseDto).build();
     }
 
