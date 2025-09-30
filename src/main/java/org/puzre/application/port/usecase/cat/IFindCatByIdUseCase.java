@@ -1,4 +1,4 @@
-package org.puzre.application.port.usecase;
+package org.puzre.application.port.usecase.cat;
 
 import org.puzre.core.domain.Cat;
 

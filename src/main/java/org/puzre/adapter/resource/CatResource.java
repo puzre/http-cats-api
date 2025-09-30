@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.puzre.adapter.resource.dto.request.CatIdRequestDto;
 import org.puzre.adapter.resource.dto.response.CatResponseDto;
 import org.puzre.adapter.resource.mapper.CatToResponseDtoMapper;
-import org.puzre.application.port.usecase.IFindCatByIdUseCase;
+import org.puzre.application.port.usecase.cat.IFindCatByIdUseCase;
 import org.puzre.core.domain.Cat;
 
 

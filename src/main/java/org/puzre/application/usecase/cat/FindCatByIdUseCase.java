@@ -1,9 +1,9 @@
-package org.puzre.application.usecase;
+package org.puzre.application.usecase.cat;
 
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import org.puzre.application.port.repository.ICatRepository;
-import org.puzre.application.port.usecase.IFindCatByIdUseCase;
+import org.puzre.application.port.usecase.cat.IFindCatByIdUseCase;
 import org.puzre.core.domain.Cat;
 import org.puzre.core.exception.CatNotFoundException;
 

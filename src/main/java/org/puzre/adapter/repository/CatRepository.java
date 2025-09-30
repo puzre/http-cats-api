@@ -32,9 +32,9 @@ public class CatRepository implements PanacheRepository<CatEntity>, ICatReposito
     }
 
     @Override
-    public Page<Cat> listAllCats(Integer page, Integer totalItems) {
+    public Page<Cat> listAllCats(Integer page, Integer size) {
 
-        io.quarkus.panache.common.Page p = new io.quarkus.panache.common.Page(page - 1, totalItems);
+        io.quarkus.panache.common.Page p = new io.quarkus.panache.common.Page(page - 1, size);
 
         PanacheQuery<CatEntity> panacheQuery = this.findAll().page(p);
 
@@ -81,9 +81,9 @@ public class CatRepository implements PanacheRepository<CatEntity>, ICatReposito
     }
 
     @Override
-    public Page<Cat> searchCatsByMessage(String message, int page, int totalItems) {
+    public Page<Cat> searchCatsByMessage(String message, int page, int size) {
 
-        io.quarkus.panache.common.Page p = new io.quarkus.panache.common.Page(page - 1, totalItems);
+        io.quarkus.panache.common.Page p = new io.quarkus.panache.common.Page(page - 1, size);
 
         PanacheQuery<CatEntity> panacheQuery = this.find("message like ?1", "%"+message+"%").page(p);
 

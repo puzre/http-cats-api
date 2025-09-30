@@ -1,0 +1,9 @@
+package org.puzre.application.port.usecase.cats;
+
+import org.puzre.core.domain.Cat;
+
+import java.util.List;
+
+public interface ISearchCatsByMessageLegacyUseCase {
+    List<Cat> execute(String message);
+}

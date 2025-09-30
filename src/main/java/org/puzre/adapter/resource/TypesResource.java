@@ -1,20 +1,12 @@
 package org.puzre.adapter.resource;
 
-import jakarta.validation.Valid;
-import jakarta.ws.rs.BeanParam;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.puzre.adapter.resource.dto.request.PageRequestDto;
-import org.puzre.adapter.resource.dto.request.TypeIdRequestDto;
-import org.puzre.adapter.resource.dto.response.CatResponseDto;
-import org.puzre.adapter.resource.dto.response.PageResponseDto;
 import org.puzre.adapter.resource.dto.response.TypeResponseDto;
 import org.puzre.adapter.resource.mapper.spi.IDomainToResponseMapper;
-import org.puzre.core.domain.Cat;
-import org.puzre.core.domain.Page;
 import org.puzre.core.domain.Type;
 import org.puzre.core.port.service.ICatService;
 import org.puzre.core.port.service.ITypeService;
