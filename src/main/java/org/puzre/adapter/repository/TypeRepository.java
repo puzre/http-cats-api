@@ -5,7 +5,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import org.puzre.adapter.repository.entity.TypeEntity;
 import org.puzre.core.domain.Type;
 import org.puzre.adapter.repository.mapper.spi.IEntityToDomainMapper;
-import org.puzre.core.port.repository.ITypeRepository;
+import org.puzre.application.port.repository.ITypeRepository;
 
 import java.util.List;
 import java.util.Optional;

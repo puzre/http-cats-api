@@ -47,14 +47,14 @@ public class CatRepository implements PanacheRepository<CatEntity>, ICatReposito
     }
 
     @Override
-    public List<Cat> listCatsLegacyByType(Long typeId) {
+    public List<Cat> listCatsByTypeIdLegacy(Long typeId) {
         return this.list("type.id = ?1", typeId).stream()
                 .map(iCatEntityToDomainMapper::toDomain)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Page<Cat> listCatsByType(Long typeId, Integer page, Integer size) {
+    public Page<Cat> listCatsByTypeId(Long typeId, Integer page, Integer size) {
 
         io.quarkus.panache.common.Page p = new io.quarkus.panache.common.Page(page - 1, size);
 
