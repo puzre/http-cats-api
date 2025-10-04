@@ -4,42 +4,36 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import lombok.RequiredArgsConstructor;
 import org.puzre.adapter.resource.dto.request.PageRequestDto;
 import org.puzre.adapter.resource.dto.request.TypeIdRequestDto;
 import org.puzre.adapter.resource.dto.response.CatResponseDto;
 import org.puzre.adapter.resource.dto.response.PageResponseDto;
 import org.puzre.adapter.resource.dto.response.TypeResponseDto;
+import org.puzre.adapter.resource.mapper.CatPageToResponseDtoMapper;
+import org.puzre.adapter.resource.mapper.CatToResponseDtoMapper;
+import org.puzre.adapter.resource.mapper.TypeToResponseDtoMapper;
+import org.puzre.application.port.usecase.cats.IListCatsByTypeIdLegacyUseCase;
+import org.puzre.application.port.usecase.cats.IListCatsByTypeIdUseCase;
+import org.puzre.application.port.usecase.type.IFindTypeByIdUseCase;
 import org.puzre.core.domain.Cat;
 import org.puzre.core.domain.Page;
 import org.puzre.core.domain.Type;
-import org.puzre.adapter.resource.mapper.spi.IDomainToResponseMapper;
-import org.puzre.core.port.service.ICatService;
-import org.puzre.core.port.service.ITypeService;
 
 import java.util.List;
 
 @Path("http-cats/type")
+@RequiredArgsConstructor
 public class TypeResource {
 
-    private final ITypeService iTypeService;
-    private final ICatService iCatService;
+    private final IFindTypeByIdUseCase iFindTypeByIdUseCase;
+    private final IListCatsByTypeIdLegacyUseCase iListCatsByTypeIdLegacyUseCase;
+    private final IListCatsByTypeIdUseCase iListCatsByTypeIdUseCase;
 
-    private final IDomainToResponseMapper<Type, TypeResponseDto> iTypeToResponseDtoMapper;
-    private final IDomainToResponseMapper<Cat, CatResponseDto> iCatToResponseDtoMapper;
-    private final IDomainToResponseMapper<Page<Cat>, PageResponseDto<CatResponseDto>> iCatPageToResponseDtoMapper;
+    private final TypeToResponseDtoMapper typeToResponseDtoMapper;
+    private final CatToResponseDtoMapper catToResponseDtoMapper;
+    private final CatPageToResponseDtoMapper catPageToResponseDtoMapper;
 
-    public TypeResource(
-            ITypeService iTypeService,
-            ICatService iCatService,
-            IDomainToResponseMapper<Type, TypeResponseDto> iTypeToResponseDtoMapper,
-            IDomainToResponseMapper<Cat, CatResponseDto> iCatToResponseDtoMapper,
-            IDomainToResponseMapper<Page<Cat>, PageResponseDto<CatResponseDto>> iCatPageToResponseDtoMapper) {
-        this.iTypeService = iTypeService;
-        this.iCatService = iCatService;
-        this.iTypeToResponseDtoMapper = iTypeToResponseDtoMapper;
-        this.iCatToResponseDtoMapper = iCatToResponseDtoMapper;
-        this.iCatPageToResponseDtoMapper = iCatPageToResponseDtoMapper;
-    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -48,8 +42,8 @@ public class TypeResource {
             @Valid @BeanParam
             TypeIdRequestDto typeIdRequestDto
     ) {
-        Type type = iTypeService.findTypeById(typeIdRequestDto.getTypeId());
-        TypeResponseDto typeResponseDto = iTypeToResponseDtoMapper.toResponseDto(type);
+        Type type = iFindTypeByIdUseCase.execute(typeIdRequestDto.getTypeId());
+        TypeResponseDto typeResponseDto = typeToResponseDtoMapper.toResponseDto(type);
         return Response.ok(typeResponseDto).build();
     }
 
@@ -60,11 +54,10 @@ public class TypeResource {
             @Valid @BeanParam
             TypeIdRequestDto typeIdRequestDto
     ) {
-        List<CatResponseDto> catResponseDtoList = iCatService.listCatsLegacyByType(typeIdRequestDto.getTypeId())
+        List<CatResponseDto> catResponseDtoList = iListCatsByTypeIdLegacyUseCase.execute(typeIdRequestDto.getTypeId())
                 .stream()
-                .map(iCatToResponseDtoMapper::toResponseDto)
+                .map(catToResponseDtoMapper::toResponseDto)
                 .toList();
-
         return Response.ok(catResponseDtoList).build();
     }
 
@@ -77,14 +70,12 @@ public class TypeResource {
             @Valid @BeanParam
             PageRequestDto pageRequestDto
     ) {
-        Page<Cat> page = iCatService.listCatsByType(
+        Page<Cat> page = iListCatsByTypeIdUseCase.execute(
                 typeIdRequestDto.getTypeId(),
                 pageRequestDto.getPage(),
                 pageRequestDto.getSize()
         );
-
-        PageResponseDto<CatResponseDto> pageResponseDto = iCatPageToResponseDtoMapper.toResponseDto(page);
-
+        PageResponseDto<CatResponseDto> pageResponseDto = catPageToResponseDtoMapper.toResponseDto(page);
         return Response.ok(pageResponseDto).build();
     }
 
