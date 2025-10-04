@@ -2,36 +2,32 @@ package org.puzre.adapter.repository;
 
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
+import lombok.RequiredArgsConstructor;
 import org.puzre.adapter.repository.entity.TypeEntity;
+import org.puzre.adapter.repository.mapper.TypeEntityToDomainMapper;
 import org.puzre.core.domain.Type;
-import org.puzre.adapter.repository.mapper.spi.IEntityToDomainMapper;
 import org.puzre.application.port.repository.ITypeRepository;
 
 import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
+@RequiredArgsConstructor
 public class TypeRepository implements PanacheRepository<TypeEntity>, ITypeRepository {
 
-    private final IEntityToDomainMapper<TypeEntity, Type> iTypeEntityToDomainMapper;
-
-    public TypeRepository(
-            IEntityToDomainMapper<TypeEntity, Type> iTypeEntityToDomainMapper
-    ) {
-        this.iTypeEntityToDomainMapper = iTypeEntityToDomainMapper;
-    }
+    private final TypeEntityToDomainMapper typeEntityToDomainMapper;
 
     @Override
     public List<Type> listAllTypes() {
         return this.listAll().stream()
-                .map(iTypeEntityToDomainMapper::toDomain)
+                .map(typeEntityToDomainMapper::toDomain)
                 .toList();
     }
 
     @Override
     public Optional<Type> findTypeById(Long id) {
-        return this.findByIdOptional((long) id)
-                .map(TypeEntity::toType);
+        return this.findByIdOptional(id)
+                .map(typeEntityToDomainMapper::toDomain);
     }
 
 }

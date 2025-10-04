@@ -3,10 +3,11 @@ package org.puzre.adapter.repository;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
+import lombok.RequiredArgsConstructor;
 import org.puzre.adapter.repository.entity.CatEntity;
+import org.puzre.adapter.repository.mapper.CatEntityToDomainMapper;
 import org.puzre.core.domain.Cat;
 import org.puzre.core.domain.Page;
-import org.puzre.adapter.repository.mapper.spi.IEntityToDomainMapper;
 import org.puzre.application.port.repository.ICatRepository;
 
 import java.util.List;
@@ -14,20 +15,15 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
+@RequiredArgsConstructor
 public class CatRepository implements PanacheRepository<CatEntity>, ICatRepository {
 
-    private final IEntityToDomainMapper<CatEntity, Cat> iCatEntityToDomainMapper;
-
-    public CatRepository(
-            IEntityToDomainMapper<CatEntity, Cat> iCatEntityToDomainMapper
-    ) {
-        this.iCatEntityToDomainMapper = iCatEntityToDomainMapper;
-    }
+    private final CatEntityToDomainMapper catEntityToDomainMapper;
 
     @Override
     public List<Cat> listAllCatsLegacy() {
         return this.listAll().stream()
-                .map(iCatEntityToDomainMapper::toDomain)
+                .map(catEntityToDomainMapper::toDomain)
                 .collect(Collectors.toList());
     }
 
@@ -39,7 +35,7 @@ public class CatRepository implements PanacheRepository<CatEntity>, ICatReposito
         PanacheQuery<CatEntity> panacheQuery = this.findAll().page(p);
 
         List<Cat> data = panacheQuery.stream()
-                .map(CatEntity::toCat)
+                .map(catEntityToDomainMapper::toDomain)
                 .toList();
 
         return new Page<>(panacheQuery.page().index + 1, panacheQuery.pageCount(), data);
@@ -49,7 +45,7 @@ public class CatRepository implements PanacheRepository<CatEntity>, ICatReposito
     @Override
     public List<Cat> listCatsByTypeIdLegacy(Long typeId) {
         return this.list("type.id = ?1", typeId).stream()
-                .map(iCatEntityToDomainMapper::toDomain)
+                .map(catEntityToDomainMapper::toDomain)
                 .collect(Collectors.toList());
     }
 
@@ -61,7 +57,7 @@ public class CatRepository implements PanacheRepository<CatEntity>, ICatReposito
         PanacheQuery<CatEntity> panacheQuery = this.find("type.id = ?1", typeId).page(p);
 
         List<Cat> data = panacheQuery.stream()
-                .map(iCatEntityToDomainMapper::toDomain)
+                .map(catEntityToDomainMapper::toDomain)
                 .toList();
 
         return new Page<>(panacheQuery.page().index + 1, panacheQuery.pageCount(), data);
@@ -70,13 +66,13 @@ public class CatRepository implements PanacheRepository<CatEntity>, ICatReposito
 
     @Override
     public Optional<Cat> findCatById(Long id) {
-        return this.findByIdOptional(id).map(iCatEntityToDomainMapper::toDomain);
+        return this.findByIdOptional(id).map(catEntityToDomainMapper::toDomain);
     }
 
     @Override
     public List<Cat> searchCatsByMessageLegacy(String message) {
         return this.list("message like ?1", "%"+message+"%").stream()
-                .map(iCatEntityToDomainMapper::toDomain)
+                .map(catEntityToDomainMapper::toDomain)
                 .collect(Collectors.toList());
     }
 
@@ -88,7 +84,7 @@ public class CatRepository implements PanacheRepository<CatEntity>, ICatReposito
         PanacheQuery<CatEntity> panacheQuery = this.find("message like ?1", "%"+message+"%").page(p);
 
         List<Cat> data = panacheQuery.stream()
-                .map(iCatEntityToDomainMapper::toDomain)
+                .map(catEntityToDomainMapper::toDomain)
                 .toList();
 
         return new Page<>(panacheQuery.page().index + 1, panacheQuery.pageCount(), data);
